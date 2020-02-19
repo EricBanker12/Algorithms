@@ -4,20 +4,17 @@ import sys
 
 def rock_paper_scissors(n):
   outputs = ['rock', 'paper', 'scissors']
-  permutations = []
 
-  if n < 1:
-    return [[]]
-
-  for hand in outputs:
-    permutations.append([hand])
-  
-  while len(permutations[-1]) < n:
-    for arr in permutations.copy():
+  def next_perm(perm, n):
+    if n == 0:
+      return perm
+    permutations = []
+    for arr in perm:
       for hand in outputs:
         permutations.append([*arr, hand])
-  
-  return [perm for perm in permutations if len(perm) == n]
+    return next_perm(permutations, n - 1)
+
+  return next_perm([[]], n)
 
 # print(rock_paper_scissors(3))
 
