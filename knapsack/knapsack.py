@@ -6,8 +6,39 @@ from collections import namedtuple
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
-  pass
-  
+  combinations = set()
+  for item in items:
+    combinations.add((item,))
+  while True:
+    temp = set()
+    temp_cleanup = set()
+    for combo in combinations:
+      for item in items:
+        # add new items to combo, if they fit
+        if not item in combo:
+          if sum([it[1] for it in combo]) <= capacity - item[1]:
+            combi = [*combo, item]
+            combi.sort(key=lambda item: item[0])
+            temp.add(tuple(combi))
+            temp_cleanup.add(combo)
+    # delete combos that were extended
+    for combo in temp_cleanup:
+      combinations.remove(combo)
+    for combo in temp:
+      combinations.add(combo)
+    # end loop if no combos were extended
+    if not temp:
+      break
+  # return highest value combo
+  max_combo = None
+  max_value = None
+  for combo in combinations:
+    value = sum([item[2] for item in combo])
+    if not max_value or value > max_value:
+      max_value = value
+      max_combo = combo
+  return {'Value': max_value, 'Chosen': [item[0] for item in max_combo]}
+
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
