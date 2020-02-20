@@ -6,14 +6,16 @@ import sys
 # a solution that is more efficient than the naive 
 # recursive solution
 def eating_cookies(n, cache=None):
-  # 1,1,2,4,7,13,24,44,81,149... n=(n-1)+(n-2)+(n-3)
-  if not cache or not cache[0]:
-    cache = [1,1,2]
-  try:
+  # bypass cache list from test file
+  if not cache or type(cache) == type([]):
+    cache = {0:1, 1:1, 2:2}
+  if n in cache:
     return cache[n]
-  except IndexError:
-    result = eating_cookies(n - 1, cache) + eating_cookies(n - 2, cache) + eating_cookies(n - 3, cache)
-    cache.append(result)
+  else:
+    # 1,1,2,4,7,13,24,44,81,149... n=(n-1)+(n-2)+(n-3)
+    result = eating_cookies(n-1, cache) + eating_cookies(n-2, cache) + eating_cookies(n-3, cache)
+    del cache[n-3]
+    cache[n] = result
     return result
 
 import random
