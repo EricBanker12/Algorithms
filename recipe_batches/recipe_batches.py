@@ -3,8 +3,15 @@
 import math
 
 def recipe_batches(recipe, ingredients):
-  pass 
-
+  result = None
+  for key in recipe:
+    try:
+      amount = ingredients[key] // recipe[key]
+      if result == None or amount < result:
+        result = amount
+    except KeyError:
+      return 0
+  return result or 0
 
 if __name__ == '__main__':
   # Change the entries of these dictionaries to test 
